@@ -1,10 +1,11 @@
 import os
 import tempfile
 import subprocess
+from typing import Callable
 
 from memory_profiler import memory_usage
 
-from models import CodeRequest, MemoryResults, AdvancedMemoryResults, FileLink
+from models import CodeRequest, MemoryResults, AdvancedMemoryResults
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -33,10 +34,19 @@ class MemoryAnalysis:
 
     @staticmethod
     def test_memory_usage(request: CodeRequest) -> float:
+        iterations: list[float] = []
+
         def wrapper():
             exec(request.code)
 
-        mem_usage = memory_usage(wrapper)  # type: ignore
+        for _ in range(request.iterations):
+            iterations.append(MemoryAnalysis.__single_memory_usage(wrapper))
+
+        return max(iterations)
+
+    @staticmethod
+    def __single_memory_usage(func: Callable) -> float:
+        mem_usage = memory_usage(func)  # type: ignore
         peak_memory_usage = max(mem_usage)
         return peak_memory_usage
 
