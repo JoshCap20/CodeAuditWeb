@@ -38,7 +38,7 @@ class MemoryAnalysis:
     @staticmethod
     def line_by_line_memory_usage(code: Code) -> str:
         # Save the code to a temporary file for profiling
-        temp_file = "temp_code.py"
+        temp_file = "./static/temp_code.py"
         with open(temp_file, "w") as f:
             f.write(f"@profile\n{code.code_str}")
 
@@ -53,11 +53,11 @@ class MemoryAnalysis:
     @staticmethod
     def generate_memory_chart(code: Code) -> str:
         # Save the code to a temporary file for chart generation
-        temp_file = "temp_code.py"
+        temp_file = "./static/temp_code.py"
         with open(temp_file, "w") as f:
             f.write(code.code_str)
 
-        chart_file = "memory_chart.png"
+        chart_file = "./static/memory_chart.png"
         subprocess.run(["mprof", "run", "--python", temp_file], check=False)
         subprocess.run(["mprof", "plot", "--output", chart_file], check=False)
 

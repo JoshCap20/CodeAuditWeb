@@ -15,10 +15,10 @@ class PerformanceAnalyzer:
         "time": TimeAnalysis.action,
         "memory": MemoryAnalysis.action,
         "advanced_memory": MemoryAnalysis.advanced_action,
-        "dotgraph": DotGraphGenerator.action,
-        "flamegraph": FlameGraphGenerator.action,
         "profile": ProfileAnalysis.action,
         "advanced_profile": ProfileAnalysis.advanced_action,
+        "dotgraph": DotGraphGenerator.action,
+        "flamegraph": FlameGraphGenerator.action,
     }
 
     @classmethod

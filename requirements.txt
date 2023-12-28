@@ -4,3 +4,4 @@ FastAPI
 uvicorn
 flameprof
 gprof2dot
+matplotlib
