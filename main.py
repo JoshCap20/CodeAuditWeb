@@ -13,6 +13,7 @@ app = FastAPI()
 # Static Files
 app.mount("/static", staticfiles.StaticFiles(directory="static"), name="static")
 
+
 # Routes
 @app.get("/")
 def index():
@@ -21,6 +22,7 @@ def index():
     except Exception as e:
         logger.error("Error while serving static/index.html")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/analyze", response_model=Results)
 async def process_code(request: CodeRequest) -> Results:
@@ -31,6 +33,7 @@ async def process_code(request: CodeRequest) -> Results:
         raise HTTPException(status_code=400, detail=str(e))
     except RuntimeError as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 if __name__ == "__main__":
     import uvicorn

@@ -43,7 +43,7 @@ class PerformanceAnalyzer:
                 except Exception as e:
                     logger.error(f"Error in '{option}' analysis: {e}")
                     results[option] = None
-                    raise # TODO: Remove in final version
+                    raise  # TODO: Remove in final version
         finally:
             request.delete_code_file()
 

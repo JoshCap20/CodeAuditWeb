@@ -1,6 +1,7 @@
 from .base import Base, BaseTimeMeasurement, BaseSizeMeasurement, FileLink
 from .requests import CodeRequest
 
+
 class TimeResults(BaseTimeMeasurement):
     pass
 
@@ -33,7 +34,7 @@ class Results(Base):
     flamegraph: FileLink | None = None
     dotgraph: FileLink | None = None
     memory_chart: FileLink | None = None
-    
+
     def __setitem__(self, key, value):
         if key in self.__fields__:
             setattr(self, key, value)

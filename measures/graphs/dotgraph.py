@@ -32,6 +32,11 @@ class DotGraphGenerator:
     @staticmethod
     def _create_dot_graph(profile_file: str, output_file: str) -> None:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".dot") as dot_temp_file:
-            subprocess.run(["gprof2dot", "-f", "pstats", profile_file, "-o", dot_temp_file.name], check=True)
-            subprocess.run(["dot", "-Tpng", dot_temp_file.name, "-o", output_file], check=True)
+            subprocess.run(
+                ["gprof2dot", "-f", "pstats", profile_file, "-o", dot_temp_file.name],
+                check=True,
+            )
+            subprocess.run(
+                ["dot", "-Tpng", dot_temp_file.name, "-o", output_file], check=True
+            )
             os.remove(dot_temp_file.name)
