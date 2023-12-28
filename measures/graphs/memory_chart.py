@@ -6,7 +6,7 @@ from models import CodeRequest, FileLink
 class MemoryChartGenerator:
     @staticmethod
     def action(request: CodeRequest) -> FileLink:
-        output_file: str = "./static/memory_chart.png"
+        output_file: str = "static/memory_chart.png"
         input_file: str = request.get_code_file()
         MemoryChartGenerator.generate_memory_chart(input_file, output_file)
         return FileLink.from_path(output_file)

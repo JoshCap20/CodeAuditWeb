@@ -1,26 +1,23 @@
-import cProfile
-import pstats
-import flameprof
+import subprocess
 
 from models import FileLink, CodeRequest
 
 
 class FlameGraphGenerator:
+    snakeviz_process = None
+    
     @staticmethod
     def action(request: CodeRequest) -> FileLink:
-        return FileLink.from_path(FlameGraphGenerator.generate_flamegraph(request))
+        input_file: str = request.get_code_file()
+        output_file: str = "static/test.profile"
+        FlameGraphGenerator.generate_flamegraph(input_file, output_file)
+        return FileLink.from_path(output_file)
 
     @staticmethod
-    def generate_flamegraph(request: CodeRequest) -> str:
-        profiler = cProfile.Profile(subcalls=True, builtins=True)
-        profiler.enable()
-        exec(request.code)
-        profiler.disable()
-        stats: pstats.Stats = pstats.Stats(profiler)
+    def generate_flamegraph(input_file: str, output_file: str) -> None:
+        subprocess.run(["python", "-m", "cProfile", "-o", output_file, input_file], check=True)
 
-        SAVE_FILE: str = "./static/flamegraph.svg"
+        if FlameGraphGenerator.snakeviz_process:
+            FlameGraphGenerator.snakeviz_process.terminate()
 
-        with open(SAVE_FILE, "w") as f:
-            flameprof.render(stats.stats, f)  # type: ignore
-
-        return SAVE_FILE
+        FlameGraphGenerator.snakeviz_process = subprocess.Popen(["snakeviz", output_file])

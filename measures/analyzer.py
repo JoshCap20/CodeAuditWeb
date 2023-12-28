@@ -19,9 +19,7 @@ class PerformanceAnalyzer:
         "advanced_profile": ProfileAnalysis.advanced_action,
         "dotgraph": DotGraphGenerator.action,
         "memory_chart": MemoryChartGenerator.action,
-        # "dotgraph": lambda _: None,
         "flamegraph": FlameGraphGenerator.action,
-        # "flamegraph": lambda _: None,
     }
 
     @classmethod
