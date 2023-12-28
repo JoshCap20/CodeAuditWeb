@@ -26,11 +26,13 @@ class AdvancedProfileResults(Base):
 
 class Results(Base):
     time: TimeResults | None = None
-    memory: AdvancedMemoryResults | MemoryResults | None = None
+    memory: MemoryResults | None = None
+    advanced_memory: AdvancedMemoryResults | None = None
+    profile: ProfileResults | None = None
+    advanced_profile: AdvancedProfileResults | None = None
     flamegraph: FileLink | None = None
     dotgraph: FileLink | None = None
-    profile: AdvancedProfileResults | ProfileResults | None = None
-
+    
     def __setitem__(self, key, value):
         if key in self.__fields__:
             setattr(self, key, value)
