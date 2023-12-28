@@ -1,6 +1,6 @@
-import cProfile
 import io
 import pstats
+import cProfile
 from types import FunctionType
 from line_profiler import LineProfiler
 
@@ -33,29 +33,26 @@ class ProfileAnalysis:
 
     @staticmethod
     def line_profiler(request: CodeRequest) -> str:
-        # Compile the code string into a function
-        compiled_code = compile(request.code, "<string>", "exec")
-        namespace = {}
-        exec(compiled_code, namespace)
+        temp_code_file: str = request.get_code_file()
 
-        # Find the first function in the namespace
-        func_to_profile = None
+        # Load the code from the file
+        namespace = {}
+        with open(temp_code_file) as f:
+            code = compile(f.read(), temp_code_file, "exec")
+            exec(code, namespace)
+
+        lp = LineProfiler()
+
+        # Add all functions in the namespace to the profiler
         for name, obj in namespace.items():
             if isinstance(obj, FunctionType):
-                func_to_profile = obj
-                break
+                lp.add_function(obj)
 
-        if not func_to_profile:
-            return "No function found in provided code to profile."
+        # Run each function under the profiler
+        for name, func in namespace.items():
+            if isinstance(func, FunctionType):
+                lp.runctx(f"{name}()", globals(), namespace)
 
-        # Initialize LineProfiler with the found function
-        lp = LineProfiler()
-        lp.add_function(func_to_profile)
-
-        # Execute the function under the profiler
-        lp.runctx("func_to_profile()", globals(), locals())
-
-        # Capture the profiling result as a string
         output = io.StringIO()
         lp.print_stats(output)
         return output.getvalue()
