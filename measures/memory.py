@@ -19,15 +19,9 @@ class MemoryAnalysis:
         detailed_usage: str = MemoryAnalysis.line_by_line_memory_usage(request)
         peak_memory_usage: float = MemoryAnalysis.test_memory_usage(request)
 
-        # Generate memory usage charts
-        chart_file: FileLink = FileLink.from_path(
-            file_path=MemoryAnalysis.generate_memory_chart(request)
-        )
-
         return AdvancedMemoryResults(
             detailed_usage=detailed_usage,
-            peak_memory_usage=MemoryResults.from_mebibyte(peak_memory_usage),
-            memory_chart=chart_file,
+            peak_memory_usage=MemoryResults.from_mebibyte(peak_memory_usage)
         )
 
     @staticmethod
@@ -55,14 +49,3 @@ class MemoryAnalysis:
             os.remove(temp_file_path)
 
         return profile_output
-
-    @staticmethod
-    def generate_memory_chart(request: CodeRequest) -> str:
-        chart_file = "./static/memory_chart.png"
-
-        temp_file = request.get_code_file()
-
-        subprocess.run(["mprof", "run", "--python", temp_file], check=False)
-        subprocess.run(["mprof", "plot", "--output", chart_file], check=False)
-
-        return chart_file

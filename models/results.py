@@ -12,7 +12,6 @@ class MemoryResults(BaseSizeMeasurement):
 class AdvancedMemoryResults(Base):
     detailed_usage: str  # String to hold detailed line-by-line memory usage
     peak_memory_usage: MemoryResults  # Peak memory usage statistics
-    memory_chart: FileLink | None  # File path to the memory chart image
 
 
 class ProfileResults(Base):
@@ -33,6 +32,7 @@ class Results(Base):
     advanced_profile: AdvancedProfileResults | None = None
     flamegraph: FileLink | None = None
     dotgraph: FileLink | None = None
+    memory_chart: FileLink | None = None
     
     def __setitem__(self, key, value):
         if key in self.__fields__:

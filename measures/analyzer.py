@@ -1,7 +1,7 @@
 from .time import TimeAnalysis
 from .memory import MemoryAnalysis
 from .profile import ProfileAnalysis
-from .graphs import DotGraphGenerator, FlameGraphGenerator
+from .graphs import DotGraphGenerator, FlameGraphGenerator, MemoryChartGenerator
 
 from models import CodeRequest, Results
 
@@ -17,10 +17,11 @@ class PerformanceAnalyzer:
         "advanced_memory": MemoryAnalysis.advanced_action,
         "profile": ProfileAnalysis.action,
         "advanced_profile": ProfileAnalysis.advanced_action,
-        # "dotgraph": DotGraphGenerator.action,
-        "dotgraph": lambda _: None,
-        # "flamegraph": FlameGraphGenerator.action,
-        "flamegraph": lambda _: None,
+        "dotgraph": DotGraphGenerator.action,
+        "memory_chart": MemoryChartGenerator.action,
+        # "dotgraph": lambda _: None,
+        "flamegraph": FlameGraphGenerator.action,
+        # "flamegraph": lambda _: None,
     }
 
     @classmethod
