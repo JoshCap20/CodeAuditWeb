@@ -1,7 +1,7 @@
 import time
 import subprocess
 
-from utils.logger import get_logger
+from utils import get_logger
 from models import CodeRequest, TimeResults
 
 logger = get_logger(__name__)

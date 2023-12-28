@@ -26,6 +26,7 @@ class AdvancedProfileResults(Base):
 
 class Results(Base):
     request: CodeRequest
+    output: str | None = None
     time: TimeResults | None = None
     memory: MemoryResults | None = None
     advanced_memory: AdvancedMemoryResults | None = None
@@ -40,3 +41,5 @@ class Results(Base):
             setattr(self, key, value)
         else:
             raise KeyError(f"Invalid key: {key}")
+
+    

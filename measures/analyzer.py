@@ -5,7 +5,8 @@ from .graphs import DotGraphGenerator, FlameGraphGenerator
 
 from models import CodeRequest, Results
 
-from utils.logger import get_logger
+from utils import get_logger
+
 
 logger = get_logger(__name__)
 
@@ -43,6 +44,8 @@ class PerformanceAnalyzer:
         try:
             request.generate_code_file()
 
+            results.output = request.execute()
+            
             for option in options:
                 strategy_fn = cls.strategies.get(option)
                 if not strategy_fn:

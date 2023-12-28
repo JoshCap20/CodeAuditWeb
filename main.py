@@ -7,7 +7,7 @@ import config
 from models import CodeRequest, Results
 from measures import PerformanceAnalyzer
 
-from utils.logger import get_logger
+from utils import get_logger
 
 logger = get_logger(__name__)
 

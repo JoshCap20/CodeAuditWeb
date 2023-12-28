@@ -5,7 +5,7 @@ import subprocess
 from types import FunctionType
 from line_profiler import LineProfiler
 
-from utils.logger import get_logger
+from utils import get_logger
 from models import CodeRequest, ProfileResults, AdvancedProfileResults
 
 logger = get_logger(__name__)
@@ -28,7 +28,7 @@ class ProfileAnalysis:
             ProfileResults: The profile results.
         """
         try:
-            profile = ProfileAnalysis.profile_code(request)
+            profile: str = ProfileAnalysis.profile_code(request)
             return ProfileResults(profile=profile)
         except Exception as e:
             logger.error(f"[ProfileAnalysis] Error occurred during execution: {e}")
@@ -49,7 +49,7 @@ class ProfileAnalysis:
         try:
             line_profile: str = ProfileAnalysis.line_profiler(request)
         except Exception as e:
-            logger.error(f"[ProfileAnalysis] Error occurred during execution: {e}")
+            logger.error(f"[ProfileAnalysis] Error occurred during line-by-line profiling: {e}")
             line_profile = "Unable to generate line-by-line profile."
             
         return AdvancedProfileResults(profile=profile, line_profile=line_profile)
@@ -70,7 +70,7 @@ class ProfileAnalysis:
         with tempfile.NamedTemporaryFile(
             suffix=".py", mode="w", delete=False
         ) as temp_file:
-            # Write a wrapper script that includes profiling
+            # Wrapper script with profiling
             script = (
                 "import cProfile, pstats, io\n"
                 "profiler = cProfile.Profile()\n"

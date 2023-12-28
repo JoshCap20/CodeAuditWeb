@@ -1,12 +1,11 @@
 import os
 import tempfile
 import subprocess
-from typing import Callable
 
 from memory_profiler import memory_usage
 
 from models import CodeRequest, MemoryResults, AdvancedMemoryResults
-from utils.logger import get_logger
+from utils import get_logger
 
 logger = get_logger(__name__)
 

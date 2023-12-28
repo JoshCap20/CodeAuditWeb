@@ -3,7 +3,7 @@ import tempfile
 from pydantic import validator
 
 from .base import Base, FileLink
-
+from utils import execute_file
 
 class CodeRequest(Base):
     """Request model for code analysis."""
@@ -41,3 +41,6 @@ class CodeRequest(Base):
         if not self.code_file:
             raise ValueError("Code file not set")
         return self.code_file.link
+
+    def execute(self) -> str:
+        return execute_file(self.get_code_file())
