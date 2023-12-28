@@ -1,9 +1,9 @@
-from models import CodeRequest, Results
 from .time import TimeAnalysis
-from .dotgraph import DotGraphGenerator
 from .memory import MemoryAnalysis
-from .flamegraph import FlameGraphGenerator
 from .profile import ProfileAnalysis
+from .graphs import DotGraphGenerator, FlameGraphGenerator
+
+from models import CodeRequest, Results
 
 from utils.logger import get_logger
 
@@ -17,8 +17,10 @@ class PerformanceAnalyzer:
         "advanced_memory": MemoryAnalysis.advanced_action,
         "profile": ProfileAnalysis.action,
         "advanced_profile": ProfileAnalysis.advanced_action,
-        "dotgraph": DotGraphGenerator.action,
-        "flamegraph": FlameGraphGenerator.action,
+        # "dotgraph": DotGraphGenerator.action,
+        "dotgraph": lambda _: None,
+        # "flamegraph": FlameGraphGenerator.action,
+        "flamegraph": lambda _: None,
     }
 
     @classmethod
@@ -27,7 +29,7 @@ class PerformanceAnalyzer:
 
         try:
             request.generate_code_file()
-            
+
             for option in request.options:
                 strategy_fn = cls.strategies.get(option)
                 if not strategy_fn:
