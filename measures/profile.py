@@ -4,14 +4,20 @@ import cProfile
 from types import FunctionType
 from line_profiler import LineProfiler
 
+from utils.logger import get_logger
 from models import CodeRequest, ProfileResults, AdvancedProfileResults
 
+logger = get_logger(__name__)
 
 class ProfileAnalysis:
     @staticmethod
     def action(request: CodeRequest) -> ProfileResults:
-        profile = ProfileAnalysis.profile_code(request)
-        return ProfileResults(profile=profile)
+        try:
+            profile = ProfileAnalysis.profile_code(request)
+            return ProfileResults(profile=profile)
+        except Exception as e:
+            logger.error(f"[ProfileAnalysis] Error occurred during execution: {e}")
+            raise
 
     @staticmethod
     def advanced_action(request: CodeRequest) -> AdvancedProfileResults:

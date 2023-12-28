@@ -1,6 +1,9 @@
 import time
-import logging
+
+from utils.logger import get_logger
 from models import CodeRequest, TimeResults
+
+logger = get_logger(__name__)
 
 
 class TimeAnalysis:
@@ -10,7 +13,7 @@ class TimeAnalysis:
             execution_time: float = TimeAnalysis.test_execution_time(request)
             return TimeResults.from_nano_seconds(execution_time)
         except Exception as e:
-            logging.error(f"[TimeAnalysis] Error occurred during execution: {e}")
+            logger.error(f"[TimeAnalysis] Error occurred during execution: {e}")
             raise
 
     @staticmethod
@@ -19,7 +22,7 @@ class TimeAnalysis:
         for _ in range(request.iterations):
             iterations.append(TimeAnalysis.__single_execution_time(request.code))
         return sum(iterations) / len(iterations)
-    
+
     @staticmethod
     def __single_execution_time(code: str) -> float:
         start_time: float = time.perf_counter_ns()

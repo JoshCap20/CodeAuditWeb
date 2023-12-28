@@ -3,6 +3,7 @@ import tempfile
 import cProfile
 import subprocess
 
+import config
 from models import CodeRequest, FileLink
 
 
@@ -16,9 +17,8 @@ class DotGraphGenerator:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".prof") as temp_profile:
             temp_code_file: str = request.get_code_file()
             DotGraphGenerator._profile_code(temp_code_file, temp_profile.name)
-            graph_file = "static/dotgraph.png"
-            DotGraphGenerator._create_dot_graph(temp_profile.name, graph_file)
-            return graph_file
+            DotGraphGenerator._create_dot_graph(temp_profile.name, config.DOTGRAPH_FILE)
+            return config.DOTGRAPH_FILE
 
     @staticmethod
     def _profile_code(code_file: str, output_file: str) -> None:

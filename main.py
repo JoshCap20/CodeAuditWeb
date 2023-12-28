@@ -1,6 +1,8 @@
+import uvicorn
 from fastapi import FastAPI, HTTPException, staticfiles
 from fastapi.responses import FileResponse
 
+import config
 from models import CodeRequest, Results
 from measures import PerformanceAnalyzer
 
@@ -11,14 +13,14 @@ logger = get_logger(__name__)
 app = FastAPI()
 
 # Static Files
-app.mount("/static", staticfiles.StaticFiles(directory="static"), name="static")
+app.mount("/static", staticfiles.StaticFiles(directory=config.STATIC_DIR), name="static")
 
 
 # Routes
 @app.get("/")
 def index():
     try:
-        return FileResponse("./static/index/index.html")
+        return FileResponse(config.INDEX_FILE)
     except Exception as e:
         logger.error("Error while serving static/index.html")
         raise HTTPException(status_code=500, detail=str(e))
@@ -36,6 +38,4 @@ async def process_code(request: CodeRequest) -> Results:
 
 
 if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app)
+    uvicorn.run(app, host=config.HOST, port=config.PORT)

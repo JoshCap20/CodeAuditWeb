@@ -1,5 +1,6 @@
 import subprocess
 
+import config
 from models import FileLink, CodeRequest
 
 
@@ -9,9 +10,8 @@ class FlameGraphGenerator:
     @staticmethod
     def action(request: CodeRequest) -> FileLink:
         input_file: str = request.get_code_file()
-        output_file: str = "static/test.profile"
-        FlameGraphGenerator.generate_flamegraph(input_file, output_file)
-        return FileLink.from_path(output_file)
+        FlameGraphGenerator.generate_flamegraph(input_file, config.FLAMEGRAPH_PROFILE)
+        return FileLink.from_path(config.FLAMEGRAPH_PROFILE)
 
     @staticmethod
     def generate_flamegraph(input_file: str, output_file: str) -> None:

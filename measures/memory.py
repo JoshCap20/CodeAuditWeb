@@ -13,8 +13,12 @@ logger = get_logger(__name__)
 class MemoryAnalysis:
     @staticmethod
     def action(request: CodeRequest) -> MemoryResults:
-        peak_memory_usage: float = MemoryAnalysis.test_memory_usage(request)
-        return MemoryResults.from_mebibyte(peak_memory_usage)
+        try:
+            peak_memory_usage: float = MemoryAnalysis.test_memory_usage(request)
+            return MemoryResults.from_mebibyte(peak_memory_usage)
+        except Exception as e:
+            logger.error(f"[MemoryAnalysis] Error occurred during execution: {e}")
+            raise
 
     @staticmethod
     def advanced_action(request: CodeRequest) -> AdvancedMemoryResults:
@@ -56,7 +60,9 @@ class MemoryAnalysis:
                 text=True,
             )
         except subprocess.CalledProcessError as e:
-            logger.error(f"Error in memory_profiler: {e.output}")
+            logger.error(
+                f"(line_by_line_memory_usage) Error in memory_profiler: {e.output}"
+            )
             raise
         finally:
             os.remove(temp_file_path)
