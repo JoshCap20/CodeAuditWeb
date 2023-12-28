@@ -53,9 +53,7 @@ async function getResults(code, options, iterations) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                code: {
-                    code_str: code,
-                },
+                code: code,
                 options: options,
                 iterations: iterations
             })

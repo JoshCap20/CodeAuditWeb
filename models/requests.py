@@ -35,6 +35,7 @@ class CodeRequest(Base):
     def delete_code_file(self) -> None:
         if self.code_file:
             os.remove(self.code_file.link)
+            self.code_file = None
 
     def get_code_file(self) -> str:
         if not self.code_file:
