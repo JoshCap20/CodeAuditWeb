@@ -13,7 +13,6 @@ class BaseMeasurement(Base):
 
     class Config:
         arbitrary_types_allowed = True
-        underscore_attrs_are_private = True
 
 
 BTM = TypeVar("BTM", bound="BaseTimeMeasurement")

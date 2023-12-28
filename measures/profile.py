@@ -45,8 +45,13 @@ class ProfileAnalysis:
         Returns:
             AdvancedProfileResults: The advanced profile results.
         """
-        profile = ProfileAnalysis.profile_code(request)
-        line_profile = ProfileAnalysis.line_profiler(request)
+        profile: str = ProfileAnalysis.profile_code(request)
+        try:
+            line_profile: str = ProfileAnalysis.line_profiler(request)
+        except Exception as e:
+            logger.error(f"[ProfileAnalysis] Error occurred during execution: {e}")
+            line_profile = "Unable to generate line-by-line profile."
+            
         return AdvancedProfileResults(profile=profile, line_profile=line_profile)
 
     @staticmethod

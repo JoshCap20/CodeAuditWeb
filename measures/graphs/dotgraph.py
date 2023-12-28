@@ -1,6 +1,5 @@
 import os
 import tempfile
-import cProfile
 import subprocess
 
 import config
@@ -22,12 +21,9 @@ class DotGraphGenerator:
 
     @staticmethod
     def _profile_code(code_file: str, output_file: str) -> None:
-        profiler = cProfile.Profile()
-        profiler.enable()
-        with open(code_file, "r") as f:
-            exec(f.read())
-        profiler.disable()
-        profiler.dump_stats(output_file)
+        subprocess.run(
+            ["python", "-m", "cProfile", "-o", output_file, code_file], check=True
+        )
 
     @staticmethod
     def _create_dot_graph(profile_file: str, output_file: str) -> None:
