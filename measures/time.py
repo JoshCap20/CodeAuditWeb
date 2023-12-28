@@ -1,16 +1,16 @@
 import timeit
 
-from models import Code, TimeResults
+from models import CodeRequest, TimeResults
 
 
 class TimeAnalysis:
     @staticmethod
-    def action(code: Code, iterations: int) -> TimeResults:
-        execution_time: float = TimeAnalysis.test_execution_time(code, iterations)
+    def action(request: CodeRequest) -> TimeResults:
+        execution_time: float = TimeAnalysis.test_execution_time(request)
         return TimeResults.from_seconds(execution_time)
 
     @staticmethod
-    def test_execution_time(code: Code, iterations: int) -> float:
-        timer = timeit.Timer(code.code_str)
-        execution_time = timer.timeit(number=iterations)
+    def test_execution_time(request: CodeRequest) -> float:
+        timer = timeit.Timer(request.code)
+        execution_time = timer.timeit(number=request.iterations)
         return execution_time

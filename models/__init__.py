@@ -1,4 +1,4 @@
-from .requests import Code, CodeRequest
+from .requests import CodeRequest
 from .results import (
     Results,
     TimeResults,
@@ -10,7 +10,6 @@ from .results import (
 )
 
 __all__ = [
-    "Code",
     "CodeRequest",
     "Results",
     "TimeResults",

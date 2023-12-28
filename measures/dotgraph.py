@@ -2,19 +2,19 @@ import subprocess
 import cProfile
 import os
 
-from models import Code, FileLink
+from models import CodeRequest, FileLink
 
 
 class DotGraphGenerator:
     @staticmethod
-    def action(code: Code) -> FileLink:
-        return FileLink.from_path(DotGraphGenerator.generate_dot_graph(code))
+    def action(request: CodeRequest) -> FileLink:
+        return FileLink.from_path(DotGraphGenerator.generate_dot_graph(request))
 
     @staticmethod
-    def generate_dot_graph(code: Code) -> str:
+    def generate_dot_graph(request: CodeRequest) -> str:
         profiler = cProfile.Profile(subcalls=True, builtins=True)
         profiler.enable()
-        exec(code.code_str)
+        exec(request.code)
         profiler.disable()
 
         # Temp save the profile to a file
