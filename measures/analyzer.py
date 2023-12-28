@@ -11,6 +11,10 @@ logger = get_logger(__name__)
 
 
 class PerformanceAnalyzer:
+    """
+    Class responsible for measuring performance of code using different strategies.
+    """
+
     strategies = {
         "time": TimeAnalysis.action,
         "memory": MemoryAnalysis.action,
@@ -23,6 +27,15 @@ class PerformanceAnalyzer:
 
     @classmethod
     def measure(cls, request: CodeRequest) -> Results:
+        """
+        Measure the performance of the given code request using the specified strategies.
+
+        Args:
+            request (CodeRequest): The code request to be analyzed.
+
+        Returns:
+            Results: The results of the performance analysis.
+        """
         results = Results(request=request)
 
         try:
@@ -35,10 +48,7 @@ class PerformanceAnalyzer:
                     continue
 
                 try:
-                    if option == "time":
-                        result = strategy_fn(request)
-                    else:
-                        result = strategy_fn(request)
+                    result = strategy_fn(request)
                     results[option] = result
                 except Exception as e:
                     logger.error(f"Error in '{option}' analysis: {e}")

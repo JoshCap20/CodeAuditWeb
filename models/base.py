@@ -22,14 +22,28 @@ BTM = TypeVar("BTM", bound="BaseTimeMeasurement")
 class BaseTimeMeasurement(BaseMeasurement, Generic[BTM]):
     """Abstract class for time measurements."""
 
+    nanoseconds: float
     milliseconds: float
     seconds: float
     minutes: float
 
     @classmethod
     def from_seconds(cls, seconds: float) -> BTM:
-        return cls(milliseconds=seconds * 1000, seconds=seconds, minutes=seconds / 60)  # type: ignore
+        return cls(
+            nanoseconds=seconds * 1_000_000_000,
+            milliseconds=seconds * 1_000,
+            seconds=seconds,
+            minutes=seconds / 60,
+        ) # type: ignore
 
+    @classmethod
+    def from_nano_seconds(cls, nanoseconds: float) -> BTM:
+        return cls(
+            nanoseconds=nanoseconds,
+            milliseconds=nanoseconds / 1_000_000,
+            seconds=nanoseconds / 1_000_000_000,
+            minutes=nanoseconds / 60_000_000_000,
+        ) # type: ignore
 
 BSM = TypeVar("BSM", bound="BaseSizeMeasurement")
 
