@@ -1,49 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>CodeAuditWeb</title>
-    <!-- Scripts Import -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript"
-        charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
-    <script src="static/index/index.js"></script>
-    <!-- Styles Import -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
     <link rel="stylesheet" href="static/index/index.css">
 </head>
-
 <body>
-    <div class="request-container">
-        <!-- Code Container -->
-        <div class="container">
-            <label for="codeInput">Python Code:</label>
-            <div id="codeInput" style="height: 400px; width: 100%;"></div>
-        </div>
+    <div id="requestContainer" class="container"></div>
+    <div id="responseContainer" class="container"></div>
 
-        <!-- Options Container -->
-        <div class="container">
-            <label>Options:</label><br>
-            <div class="options"></div>
-        </div>
-
-        <!-- Iterations Container -->
-        <div class="container">
-            <label for="iterations">Iterations:</label>
-            <input type="number" id="iterations" min="1" value="1">
-        </div>
-
-        <!-- Submit Button -->
-        <button class="button" onclick="submitCode(); return false;">Run Code</button>
-    </div>
-
-    <!-- Request/Response Container -->
-    <div class="response-container">
-        <h4>Analysis:</h4>
-        <div id="analysis" style="height: 150px; width: 100%;">
-            <div id="outputs"></div>
-        </div>
-    </div>
+    <script src="static/index/index.js"></script>
 </body>
-
 </html>

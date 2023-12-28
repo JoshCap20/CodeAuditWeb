@@ -1,22 +1,15 @@
-body {
-    font-family: Arial, sans-serif;
+.container {
     margin: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    min-height: 100%;
-}
-
-@media screen and (max-width: 768px) {
-    body {
-        grid-template-columns: 1fr;
-    }
-}
-
-.request-container, .response-container {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     min-height: 100%;
     overflow-y: auto;
+}
+
+/* Responsive layout */
+@media screen and (max-width: 768px) {
+    body {
+        display: block;
+    }
 }
