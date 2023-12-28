@@ -1,7 +1,7 @@
 from .time import TimeAnalysis
 from .memory import MemoryAnalysis
 from .profile import ProfileAnalysis
-from .graphs import DotGraphGenerator, FlameGraphGenerator, MemoryChartGenerator
+from .graphs import DotGraphGenerator, FlameGraphGenerator
 
 from models import CodeRequest, Results
 
@@ -18,7 +18,6 @@ class PerformanceAnalyzer:
         "profile": ProfileAnalysis.action,
         "advanced_profile": ProfileAnalysis.advanced_action,
         "dotgraph": DotGraphGenerator.action,
-        "memory_chart": MemoryChartGenerator.action,
         "flamegraph": FlameGraphGenerator.action,
     }
 
@@ -44,6 +43,7 @@ class PerformanceAnalyzer:
                 except Exception as e:
                     logger.error(f"Error in '{option}' analysis: {e}")
                     results[option] = None
+                    raise # TODO: Remove in final version
         finally:
             request.delete_code_file()
 
