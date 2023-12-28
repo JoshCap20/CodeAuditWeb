@@ -5,6 +5,9 @@ import subprocess
 from memory_profiler import memory_usage
 
 from models import CodeRequest, MemoryResults, AdvancedMemoryResults, FileLink
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class MemoryAnalysis:
@@ -21,7 +24,7 @@ class MemoryAnalysis:
 
         return AdvancedMemoryResults(
             detailed_usage=detailed_usage,
-            peak_memory_usage=MemoryResults.from_mebibyte(peak_memory_usage)
+            peak_memory_usage=MemoryResults.from_mebibyte(peak_memory_usage),
         )
 
     @staticmethod
@@ -38,13 +41,23 @@ class MemoryAnalysis:
         with tempfile.NamedTemporaryFile(
             suffix=".py", mode="w", delete=False
         ) as temp_file:
-            temp_file.write(f"@profile\n{request.code}")
+            temp_file.write("from memory_profiler import profile\n\n@profile\n")
+            temp_file.write(f"def wrapped_function():\n")
+
+            temp_file.write(
+                "\n".join("    " + line for line in request.code.splitlines())
+            )
             temp_file_path = temp_file.name
 
         try:
             profile_output = subprocess.check_output(
-                ["python", "-m", "memory_profiler", temp_file_path], text=True
+                ["python", "-m", "memory_profiler", temp_file_path],
+                stderr=subprocess.STDOUT,
+                text=True,
             )
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Error in memory_profiler: {e.output}")
+            raise
         finally:
             os.remove(temp_file_path)
 
