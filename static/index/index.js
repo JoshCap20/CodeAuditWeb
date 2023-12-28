@@ -132,14 +132,20 @@ function displayResponse(data) {
         data.request.code = splitLines(data.request.code);
     }
 
-    if (data.request.profile && data.request.profile.profile) {
-        data.request.profile.profile = splitLines(data.request.profile.profile);
+    if (data.request.output) {
+        data.request.output = splitLines(data.request.output);
     }
 
-    if (data.request.advanced_profile) {
-        data.request.advanced_profile.profile = splitLines(data.request.advanced_profile.profile);
-        data.request.advanced.profile.line_profile = splitLines(data.request.advanced.profile.line_profile);
+    if (data.profile) {
+        data.profile.profile = splitLines(data.profile.profile);
     }
+
+    if (data.advanced_profile) {
+        data.advanced_profile.profile = splitLines(data.advanced_profile.profile);
+        data.advanced_profile.line_profile = splitLines(data.advanced_profile.line_profile);
+    }
+
+    
 
     const pre = document.createElement('pre');
     pre.style.whiteSpace = 'pre-wrap';
@@ -148,16 +154,29 @@ function displayResponse(data) {
 
     let jsonString = JSON.stringify(data, null, 4);
 
+    if (data.dotgraph) {
+        displayImage(data.dotgraph.link);
+    }
+
     codeElement.innerHTML = escapeHtml(jsonString);
 
     pre.appendChild(codeElement);
     responseContainer.appendChild(pre);
 
-    hljs.highlightBlock(codeElement);
+    hljs.highlightElement(codeElement);
 }
 
 function splitLines(data) {
     return data.split('\n');
+}
+
+function displayImage(link) {
+    // Add a new image with link as source
+    const img = document.createElement('img');
+    img.src = link;
+    img.style.width = '100%';
+    img.style.height = 'auto';
+    document.getElementById('responseContainer').appendChild(img);
 }
 
 function escapeHtml(text) {
