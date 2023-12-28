@@ -1,0 +1,6 @@
+memory-profiler
+line-profiler
+FastAPI
+uvicorn
+flameprof
+gprof2dot

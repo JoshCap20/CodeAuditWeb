@@ -1,0 +1,5 @@
+.vscode/
+*.pyc
+venv/
+.DS_Store
+utils/FlameGraph
