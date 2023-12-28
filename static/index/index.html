@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CodeAuditWeb</title>
+    <!-- Scripts Import -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript"
+        charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
+    <script src="static/index/index.js"></script>
+    <!-- Styles Import -->
+    <link rel="stylesheet" href="static/index/index.css">
+</head>
+
+<body>
+    <!-- Code Container -->
+    <div class="container">
+        <label for="codeInput">Python Code:</label>
+        <div id="codeInput" style="height: 150px; width: 100%;"></div>
+    </div>
+
+    <!-- Options Container -->
+    <div class="container">
+        <label>Options:</label><br>
+        <input type="checkbox" id="time" name="option" value="time">
+        <label for="timer">Time Analysis</label><br>
+        <input type="checkbox" id="memory" name="option" value="memory">
+        <label for="memory">Memory Analysis</label><br>
+        <input type="checkbox" id="advanced_memory" name="option" value="advanced_memory">
+        <label for="advanced_memory">Advanced Memory Analysis</label><br>
+        <input type="checkbox" id="profile" name="option" value="profile">
+        <label for="profile">Profile Analysis</label><br>
+        <input type="checkbox" id="advanced_profile" name="option" value="advanced_profile">
+        <label for="advanced_profile">Advanced Profile Analysis</label><br>
+        <input type="checkbox" id="flamegraph" name="option" value="flamegraph">
+        <label for="flamegraph">Generate Flame Graph</label><br>
+        <input type="checkbox" id="dotgraph" name="option" value="dotgraph">
+        <label for="dotgraph">Generate Dot Graph</label><br>
+    </div>
+
+    <!-- Iterations Container -->
+    <div class="container">
+        <label for="iterations">Iterations:</label>
+        <input type="number" id="iterations" min="1" value="1">
+    </div>
+
+    <!-- Submit Button -->
+    <button class="button" onclick="submitCode(); return false;">Run Code</button>
+
+
+    <!-- Request/Response Container -->
+    <div class="container">
+        <h4>Analysis:</h4>
+        <div id="analysis" style="height: 150px; width: 100%;">
+            <label for="inputs">Input:</label>
+            <div id="inputs"></div>
+            <label for="outputs">Output:</label>
+            <div id="outputs"></div>
+        </div>
+    </div>
+</body>
+
+</html>
