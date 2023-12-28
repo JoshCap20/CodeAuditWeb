@@ -18,7 +18,7 @@ class MemoryAnalysis:
         peak_memory_usage: float = MemoryAnalysis.test_memory_usage(code)
 
         # Generate memory usage charts
-        chart_file: FileLink = FileLink.from_path(file=MemoryAnalysis.generate_memory_chart(code))
+        chart_file: FileLink = FileLink.from_path(file_path=MemoryAnalysis.generate_memory_chart(code))
 
         return AdvancedMemoryResults(
             detailed_usage=detailed_usage,

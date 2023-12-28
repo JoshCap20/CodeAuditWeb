@@ -48,15 +48,14 @@ class BaseSizeMeasurement(BaseMeasurement, Generic[BSM]):
         )  # type: ignore
 
 
-class FileLink(Base):
-    """Model for representing a file link."""
-    
-    url: HttpUrl
+class FileLink(BaseModel):
+    """Model for representing a file link relative to the static directory."""
+
+    link: str
 
     def __str__(self):
-        return self.url
-    
+        return self.link
+
     @classmethod
-    def from_path(cls, file: str) -> "FileLink":
-        path: HttpUrl = HttpUrl.build(scheme="file", host="", path=file)
-        return cls(url=path)
+    def from_path(cls, file_path: str) -> "FileLink":
+        return cls(link=file_path)

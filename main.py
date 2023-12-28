@@ -17,7 +17,7 @@ app.mount("/static", staticfiles.StaticFiles(directory="static"), name="static")
 @app.get("/")
 def index():
     try:
-        return FileResponse("static/index.html")
+        return FileResponse("./static/index/index.html")
     except Exception as e:
         logger.error("Error while serving static/index.html")
         raise HTTPException(status_code=500, detail=str(e))

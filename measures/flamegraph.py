@@ -2,19 +2,19 @@ import cProfile
 import pstats
 import flameprof
 
-from models import FileLink
+from models import FileLink, Code
 
 
 class FlameGraphGenerator:
     @staticmethod
-    def action(code: str) -> FileLink:
+    def action(code: Code) -> FileLink:
         return FileLink.from_path(FlameGraphGenerator.generate_flamegraph(code))
 
     @staticmethod
-    def generate_flamegraph(code) -> str:
+    def generate_flamegraph(code: Code) -> str:
         profiler = cProfile.Profile(subcalls=True, builtins=True)
         profiler.enable()
-        exec(code)
+        exec(code.code_str)
         profiler.disable()
         stats: pstats.Stats = pstats.Stats(profiler)
 
