@@ -10,8 +10,21 @@ from models import CodeRequest, ProfileResults, AdvancedProfileResults
 logger = get_logger(__name__)
 
 class ProfileAnalysis:
+    """
+    Class for performing code profiling and analysis.
+    """
+
     @staticmethod
     def action(request: CodeRequest) -> ProfileResults:
+        """
+        Perform code profiling and return the results.
+
+        Args:
+            request (CodeRequest): The code request object.
+
+        Returns:
+            ProfileResults: The profile results.
+        """
         try:
             profile = ProfileAnalysis.profile_code(request)
             return ProfileResults(profile=profile)
@@ -21,12 +34,30 @@ class ProfileAnalysis:
 
     @staticmethod
     def advanced_action(request: CodeRequest) -> AdvancedProfileResults:
+        """
+        Perform advanced code profiling and return the results.
+
+        Args:
+            request (CodeRequest): The code request object.
+
+        Returns:
+            AdvancedProfileResults: The advanced profile results.
+        """
         profile = ProfileAnalysis.profile_code(request)
         line_profile = ProfileAnalysis.line_profiler(request)
         return AdvancedProfileResults(profile=profile, line_profile=line_profile)
 
     @staticmethod
     def profile_code(request: CodeRequest) -> str:
+        """
+        Profile the code and return the profiling results.
+
+        Args:
+            request (CodeRequest): The code request object.
+
+        Returns:
+            str: The profiling results.
+        """
         profiler = cProfile.Profile()
         profiler.enable()
         exec(request.code)
@@ -39,6 +70,15 @@ class ProfileAnalysis:
 
     @staticmethod
     def line_profiler(request: CodeRequest) -> str:
+        """
+        Perform line-by-line code profiling and return the profiling results.
+
+        Args:
+            request (CodeRequest): The code request object.
+
+        Returns:
+            str: The line-by-line profiling results.
+        """
         temp_code_file: str = request.get_code_file()
 
         # Load the code from the file

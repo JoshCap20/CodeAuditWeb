@@ -16,6 +16,7 @@ class PerformanceAnalyzer:
     """
 
     strategies = {
+        # Add new strategies here
         "time": TimeAnalysis.action,
         "memory": MemoryAnalysis.action,
         "advanced_memory": MemoryAnalysis.advanced_action,

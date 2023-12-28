@@ -12,8 +12,21 @@ logger = get_logger(__name__)
 
 
 class MemoryAnalysis:
+    """
+    Class for analyzing memory usage in code execution.
+    """
+
     @staticmethod
     def action(request: CodeRequest) -> MemoryResults:
+        """
+        Perform memory analysis on the given code request.
+
+        Args:
+            request (CodeRequest): The code request object.
+
+        Returns:
+            MemoryResults: The memory analysis results.
+        """
         try:
             peak_memory_usage: float = MemoryAnalysis.test_memory_usage(request)
             return MemoryResults.from_mebibyte(peak_memory_usage)
@@ -23,6 +36,15 @@ class MemoryAnalysis:
 
     @staticmethod
     def advanced_action(request: CodeRequest) -> AdvancedMemoryResults:
+        """
+        Perform advanced memory analysis on the given code request.
+
+        Args:
+            request (CodeRequest): The code request object.
+
+        Returns:
+            AdvancedMemoryResults: The advanced memory analysis results.
+        """
         # Detailed memory usage and profiling
         detailed_usage: str = MemoryAnalysis.line_by_line_memory_usage(request)
         peak_memory_usage: float = MemoryAnalysis.test_memory_usage(request)
@@ -34,16 +56,44 @@ class MemoryAnalysis:
 
     @staticmethod
     def test_memory_usage(request: CodeRequest) -> float:
+        """
+        Test the memory usage of the code execution. Runs the code multiple times as specified in the CodeRequest.iterations and returns the peak memory usage.
+
+        Args:
+            request (CodeRequest): The code request object.
+
+        Returns:
+            float: The peak memory usage in megabytes.
+        """
         wrapper = lambda: exec(request.code)
         return max(MemoryAnalysis.__single_memory_usage(wrapper) for _ in range(request.iterations))
 
     @staticmethod
     def __single_memory_usage(func: Callable) -> float:
+        """
+        Calculate the memory usage of a single function execution.
+
+        Args:
+            func (Callable): The function to be executed.
+
+        Returns:
+            float: The peak memory usage in megabytes.
+        """
         mem_usage = memory_usage(func)  # type: ignore
         return max(mem_usage)
 
+    # TODO: Fix
     @staticmethod
     def line_by_line_memory_usage(request: CodeRequest) -> str:
+        """
+        Calculate the line-by-line memory usage of the code execution.
+
+        Args:
+            request (CodeRequest): The code request object.
+
+        Returns:
+            str: The line-by-line memory usage profile.
+        """
         with tempfile.NamedTemporaryFile(
             suffix=".py", mode="w", delete=False
         ) as temp_file:
