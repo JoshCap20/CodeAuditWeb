@@ -1,8 +1,31 @@
 function displayResponse(jsonResponse) {
-    // Pretty print JSON response
-    let formattedResults = '<pre>' + escapeHtml(JSON.stringify(jsonResponse, null, 4)) + '</pre>';
-
+    let formattedResults = '<div style="white-space: pre-wrap;">' + formatJson(jsonResponse, '') + '</div>';
     document.getElementById('outputs').innerHTML = formattedResults;
+}
+
+function formatJson(jsonObj, indent) {
+    let formattedJson = '';
+    for (const key in jsonObj) {
+        if (jsonObj.hasOwnProperty(key)) {
+            if (jsonObj[key] === null) {
+                continue;
+            }
+            formattedJson += `${indent}<strong>${key}:</strong> `;
+            if (typeof jsonObj[key] === 'object' && jsonObj[key] !== null) {
+                if (jsonObj[key].link) {
+                    // Handle link
+                    formattedJson += `<a href="${jsonObj[key].link}" target="_blank">${jsonObj[key].link}</a>\n`;
+                } else {
+                    // Recursive call for nested objects with increased indent
+                    formattedJson += '\n' + formatJson(jsonObj[key], indent + '  ');
+                }
+            } else {
+                // Handle normal and multiline strings
+                formattedJson += `${escapeHtml(jsonObj[key])}<br>`;
+            }
+        }
+    }
+    return formattedJson;
 }
 
 async function getResults(code, options, iterations) {
@@ -46,12 +69,15 @@ async function getResults(code, options, iterations) {
 }
 
 function escapeHtml(text) {
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    if (typeof text === 'string') {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+    return text;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
