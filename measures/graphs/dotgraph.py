@@ -9,35 +9,27 @@ from models import CodeRequest, FileLink
 class DotGraphGenerator:
     @staticmethod
     def action(request: CodeRequest) -> FileLink:
-        return FileLink.from_path(DotGraphGenerator.generate_dot_graph(request))
+        return FileLink.from_path(DotGraphGenerator.generate_graph(request))
 
     @staticmethod
-    def generate_dot_graph(request: CodeRequest) -> str:
-        profiler = cProfile.Profile(subcalls=True, builtins=True)
-        profiler.enable()
-        exec(request.code)
-        profiler.disable()
-
+    def generate_graph(request: CodeRequest) -> str:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".prof") as temp_profile:
-            profiler.dump_stats(temp_profile.name)
+            temp_code_file: str = request.get_code_file()
+            DotGraphGenerator._profile_code(temp_code_file, temp_profile.name)
+            graph_file = "./static/dotgraph.png"
+            DotGraphGenerator._create_dot_graph(temp_profile.name, graph_file)
+            return graph_file
 
-            # Set up the output file for the dot graph
-            SAVE_FILE = "./static/dotgraph.png"
+    @staticmethod
+    def _profile_code(code_file: str, output_file: str) -> None:
+        profiler = cProfile.Profile()
+        profiler.enable()
+        with open(code_file, "r") as f:
+            exec(f.read())
+        profiler.disable()
+        profiler.dump_stats(output_file)
 
-            # Set up the pipeline: gprof2dot | dot
-            with open(SAVE_FILE, "wb") as output_file:
-                gprof2dot_process = subprocess.Popen(
-                    ["gprof2dot.py", "-f", "pstats", temp_profile.name],
-                    stdout=subprocess.PIPE
-                )
-                subprocess.run(
-                    ["dot", "-Tpng", "-o", output_file.name],
-                    stdin=gprof2dot_process.stdout,
-                    stdout=output_file
-                )
-                if gprof2dot_process.stdout:
-                    gprof2dot_process.stdout.close()
-
-        os.remove(temp_profile.name)  # Clean up the temporary profile file
-
-        return SAVE_FILE
+    @staticmethod
+    def _create_dot_graph(profile_file: str, output_file: str) -> None:
+        subprocess.run(["gprof2dot", "-f", "pstats", profile_file, "-o", output_file])
+        subprocess.run(["dot", "-Tpng", output_file, "-o", output_file])
