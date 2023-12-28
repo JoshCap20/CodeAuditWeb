@@ -34,21 +34,13 @@ class MemoryAnalysis:
 
     @staticmethod
     def test_memory_usage(request: CodeRequest) -> float:
-        iterations: list[float] = []
-
-        def wrapper():
-            exec(request.code)
-
-        for _ in range(request.iterations):
-            iterations.append(MemoryAnalysis.__single_memory_usage(wrapper))
-
-        return max(iterations)
+        wrapper = lambda: exec(request.code)
+        return max(MemoryAnalysis.__single_memory_usage(wrapper) for _ in range(request.iterations))
 
     @staticmethod
     def __single_memory_usage(func: Callable) -> float:
         mem_usage = memory_usage(func)  # type: ignore
-        peak_memory_usage = max(mem_usage)
-        return peak_memory_usage
+        return max(mem_usage)
 
     @staticmethod
     def line_by_line_memory_usage(request: CodeRequest) -> str:

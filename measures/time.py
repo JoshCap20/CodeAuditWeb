@@ -18,10 +18,7 @@ class TimeAnalysis:
 
     @staticmethod
     def test_execution_time(request: CodeRequest) -> float:
-        iterations: list[float] = []
-        for _ in range(request.iterations):
-            iterations.append(TimeAnalysis.__single_execution_time(request.code))
-        return sum(iterations) / len(iterations)
+        return sum(TimeAnalysis.__single_execution_time(request.code) for _ in range(request.iterations)) / request.iterations
 
     @staticmethod
     def __single_execution_time(code: str) -> float:
