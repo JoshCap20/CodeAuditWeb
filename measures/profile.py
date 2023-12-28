@@ -1,6 +1,7 @@
 import io
-import pstats
-import cProfile
+import os
+import tempfile
+import subprocess
 from types import FunctionType
 from line_profiler import LineProfiler
 
@@ -8,6 +9,7 @@ from utils.logger import get_logger
 from models import CodeRequest, ProfileResults, AdvancedProfileResults
 
 logger = get_logger(__name__)
+
 
 class ProfileAnalysis:
     """
@@ -52,21 +54,39 @@ class ProfileAnalysis:
         """
         Profile the code and return the profiling results.
 
+        Note: The subprocess includes and returns its own profiling results to avoid interference with subprocess profiling.
+
         Args:
             request (CodeRequest): The code request object.
 
         Returns:
             str: The profiling results.
         """
-        profiler = cProfile.Profile()
-        profiler.enable()
-        exec(request.code)
-        profiler.disable()
+        with tempfile.NamedTemporaryFile(
+            suffix=".py", mode="w", delete=False
+        ) as temp_file:
+            # Write a wrapper script that includes profiling
+            script = (
+                "import cProfile, pstats, io\n"
+                "profiler = cProfile.Profile()\n"
+                "profiler.enable()\n"
+                f"{request.code}\n"
+                "profiler.disable()\n"
+                "s = io.StringIO()\n"
+                "stats = pstats.Stats(profiler, stream=s).sort_stats('cumulative')\n"
+                "stats.print_stats()\n"
+                "print(s.getvalue())"
+            )
+            temp_file.write(script)
+            temp_file_path = temp_file.name
 
-        s = io.StringIO()
-        stats = pstats.Stats(profiler, stream=s).sort_stats("cumulative")
-        stats.print_stats()
-        return s.getvalue()
+        try:
+            result = subprocess.run(
+                ["python", temp_file_path], capture_output=True, text=True, check=True
+            )
+            return result.stdout
+        finally:
+            os.remove(temp_file_path)
 
     @staticmethod
     def line_profiler(request: CodeRequest) -> str:

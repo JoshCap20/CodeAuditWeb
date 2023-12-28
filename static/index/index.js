@@ -13,7 +13,7 @@ function formatJson(jsonObj, indent) {
             formattedJson += `${indent}<strong>${key}:</strong> `;
             if (typeof jsonObj[key] === 'object' && jsonObj[key] !== null) {
                 if (key === 'flamegraph') {
-                    formattedJson += `Flamegraph opened in new window`;
+                    formattedJson += `Flamegraph opened in new window\n`;
                     continue;
                 }
                 if (jsonObj[key].link) {

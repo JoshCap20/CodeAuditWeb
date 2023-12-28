@@ -1,4 +1,5 @@
 import time
+import subprocess
 
 from utils.logger import get_logger
 from models import CodeRequest, TimeResults
@@ -40,10 +41,11 @@ class TimeAnalysis:
         Returns:
             float: The average execution time in seconds.
         """
-        return sum(TimeAnalysis.__single_execution_time(request.code) for _ in range(request.iterations)) / request.iterations
+        code_file: str = request.get_code_file()
+        return sum(TimeAnalysis.__single_execution_time(code_file) for _ in range(request.iterations)) / request.iterations
 
     @staticmethod
-    def __single_execution_time(code: str) -> float:
+    def __single_execution_time(code_file: str) -> float:
         """
         Measures the execution time of a single code snippet.
 
@@ -54,6 +56,6 @@ class TimeAnalysis:
             float: The execution time in seconds.
         """
         start_time: float = time.perf_counter_ns()
-        exec(code)
+        subprocess.run(["python", code_file], check=True)
         end_time: float = time.perf_counter_ns()
         return end_time - start_time

@@ -27,16 +27,24 @@ def check_install_command(command, install_command):
 
 
 def main():
-    # Check for all requirements
-    check_requirements()
+    try:
+        # Check for all requirements
+        check_requirements()
+    except Exception as e:
+        print(f"Error while checking requirements: {e}")
+        return
 
-    # Check for Graphviz
-    if sys.platform.startswith("linux"):
-        check_install_command("dot", "sudo apt-get install graphviz")
-    elif sys.platform == "darwin":
-        check_install_command("dot", "brew install graphviz")
-    elif sys.platform == "win32":
-        print("Please install Graphviz from https://graphviz.org/download/")
+    try:
+        # Check for Graphviz
+        if sys.platform.startswith("linux"):
+            check_install_command("dot", "sudo apt-get install graphviz")
+        elif sys.platform == "darwin":
+            check_install_command("dot", "brew install graphviz")
+        elif sys.platform == "win32":
+            print("Please install Graphviz from https://graphviz.org/download/")
+    except Exception as e:
+        print(f"Error while checking Graphviz: {e}")
+        return
 
 
 if __name__ == "__main__":

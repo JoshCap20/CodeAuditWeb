@@ -65,21 +65,38 @@ class MemoryAnalysis:
         Returns:
             float: The peak memory usage in megabytes.
         """
-        wrapper = lambda: exec(request.code)
-        return max(MemoryAnalysis.__single_memory_usage(wrapper) for _ in range(request.iterations))
+        filepath = request.get_code_file()
+        return max(
+            MemoryAnalysis.__single_memory_usage(filepath)
+            for _ in range(request.iterations)
+        )
 
     @staticmethod
-    def __single_memory_usage(func: Callable) -> float:
+    def __single_memory_usage(filepath: str) -> float:
         """
-        Calculate the memory usage of a single function execution.
+        Calculate the maximum memory usage of a subprocess running a given script.
 
         Args:
-            func (Callable): The function to be executed.
+            filepath (str): The path to the script file.
 
         Returns:
-            float: The peak memory usage in megabytes.
+            float: The maximum memory usage in bytes.
         """
-        mem_usage = memory_usage(func)  # type: ignore
+
+        def run_script():
+            # Run the script in a separate process
+            with subprocess.Popen(
+                ["python", filepath], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            ) as proc:
+                try:
+                    proc.communicate(timeout=30)  # Adjust timeout as needed
+                except subprocess.TimeoutExpired:
+                    logger.error(f"Timeout expired while executing {filepath}")
+                    proc.kill()
+                    proc.communicate()
+
+        # Measure the memory usage of the subprocess
+        mem_usage = memory_usage(run_script)  # type: ignore
         return max(mem_usage)
 
     # TODO: Fix
