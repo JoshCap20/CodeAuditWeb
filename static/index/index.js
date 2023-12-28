@@ -1,33 +1,6 @@
-function displayRequest(code, iterations, options) {
-    document.getElementById('inputs').innerHTML = 'Code: ' + code +
-        '<br>Iterations: ' + iterations +
-        '<br>Selected Options: ' + options.join(', ');
-}
-
 function displayResponse(jsonResponse) {
-    let formattedResults = '<h2>Results:</h2>';
-
-    if (jsonResponse.time) {
-        formattedResults += '<div><strong>Execution Time:</strong><br>';
-        formattedResults += `Milliseconds: ${jsonResponse.time.milliseconds}<br>`;
-        formattedResults += `Seconds: ${jsonResponse.time.seconds}<br>`;
-        formattedResults += `Minutes: ${jsonResponse.time.minutes}</div>`;
-    }
-
-    if (jsonResponse.memory) {
-        formattedResults += '<div><strong>Memory Usage:</strong><br>';
-        formattedResults += `Kilobytes: ${jsonResponse.memory.kilobytes}<br>`;
-        formattedResults += `Megabytes: ${jsonResponse.memory.megabytes}<br>`;
-        formattedResults += `Gigabytes: ${jsonResponse.memory.gigabytes}</div>`;
-    }
-
-    if (jsonResponse.profile) {
-        formattedResults += `<div><strong>Profile Data:</strong><pre style="font-family: monospace;">${escapeHtml(jsonResponse.profile)}</pre></div>`;
-    }
-
-    if (jsonResponse.flamegraph) {
-        formattedResults += `<div><strong>Flame Graph:</strong> <a href="/flamegraph" target="_blank">View</a></div>`;
-    }
+    // Pretty print JSON response
+    let formattedResults = '<pre>' + escapeHtml(JSON.stringify(jsonResponse, null, 4)) + '</pre>';
 
     document.getElementById('outputs').innerHTML = formattedResults;
 }
@@ -101,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var options = document.querySelectorAll('input[name="option"]:checked');
         var selectedOptions = Array.from(options).map(function (el) { return el.value; });
 
-        displayRequest(code, iterations, selectedOptions);
         getResults(code, selectedOptions, iterations);
     }
 });

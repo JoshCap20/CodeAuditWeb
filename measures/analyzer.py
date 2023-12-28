@@ -23,7 +23,7 @@ class PerformanceAnalyzer:
 
     @classmethod
     def measure(cls, request: CodeRequest) -> Results:
-        results = Results()
+        results = Results(request=request)
         code: Code = request.code
         iterations: int = request.iterations
 

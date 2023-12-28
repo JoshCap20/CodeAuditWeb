@@ -1,5 +1,5 @@
 from .base import Base, BaseTimeMeasurement, BaseSizeMeasurement, FileLink
-
+from .requests import CodeRequest
 
 class TimeResults(BaseTimeMeasurement):
     pass
@@ -25,6 +25,7 @@ class AdvancedProfileResults(Base):
 
 
 class Results(Base):
+    request: CodeRequest
     time: TimeResults | None = None
     memory: MemoryResults | None = None
     advanced_memory: AdvancedMemoryResults | None = None
