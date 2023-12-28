@@ -12,6 +12,10 @@ function formatJson(jsonObj, indent) {
             }
             formattedJson += `${indent}<strong>${key}:</strong> `;
             if (typeof jsonObj[key] === 'object' && jsonObj[key] !== null) {
+                if (key === 'flamegraph') {
+                    formattedJson += `Flamegraph opened in new window`;
+                    continue;
+                }
                 if (jsonObj[key].link) {
                     // Handle link
                     formattedJson += `<a href="${jsonObj[key].link}" target="_blank">${jsonObj[key].link}</a>\n`;
@@ -101,3 +105,50 @@ document.addEventListener('DOMContentLoaded', function () {
         getResults(code, selectedOptions, iterations);
     }
 });
+
+async function fetchStrategies() {
+    try {
+        const response = await fetch('/strategies');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Fetching strategies failed:', error);
+    }
+}
+
+function createCheckbox(id, label) {
+    const container = document.createElement('div');
+    const checkbox = document.createElement('input');
+    const labelElement = document.createElement('label');
+
+    checkbox.type = 'checkbox';
+    checkbox.id = id;
+    checkbox.name = 'option';
+    checkbox.value = id;
+
+    labelElement.htmlFor = id;
+    labelElement.textContent = label;
+
+    container.appendChild(checkbox);
+    container.appendChild(labelElement);
+
+    return container;
+}
+
+function formatLabel(str) {
+    return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+}
+
+async function populateOptions() {
+    const strategies = await fetchStrategies();
+    const optionsContainer = document.querySelector('.options');
+
+    strategies.forEach(strategy => {
+        const label = formatLabel(strategy) + ' Analysis';
+        optionsContainer.appendChild(createCheckbox(strategy, label));
+    });
+}
+
+document.addEventListener('DOMContentLoaded', populateOptions);
