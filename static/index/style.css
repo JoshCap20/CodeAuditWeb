@@ -20,11 +20,12 @@ body {
 
 .container {
     max-width: 960px;
-    margin: 0 auto;
+    margin: 5px auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    border-radius: 7px;
 }
 
 .responseContainer {
@@ -33,6 +34,10 @@ body {
     background-color: #e9ecef;
     border: 1px solid #ced4da;
     border-radius: 4px;
+}
+
+.hidden {
+    display: none;
 }
 
 /* Form */

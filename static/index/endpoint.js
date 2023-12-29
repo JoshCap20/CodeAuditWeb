@@ -39,6 +39,9 @@ function createForm() {
 
 async function handleFormSubmit(event) {
     event.preventDefault();
+
+    clearResponse();
+
     const form = event.currentTarget;
     const formData = new FormData(form);
     const method = formData.get('method');
@@ -94,6 +97,16 @@ function displayResponse(response) {
     responseText.className = 'json';
     responseText.textContent = response;
     responseElement.appendChild(responseText);
-    document.getElementById('responseContainer').appendChild(responseElement);
+
+    const responseContainer = document.getElementById('responseContainer');
+    responseContainer.appendChild(responseElement);
     hljs.highlightElement(responseElement);
+
+    showElement(responseContainer);
+}
+
+function clearResponse() {
+    const responseContainer = document.getElementById('responseContainer');
+    responseContainer.innerHTML = '';
+    hideElement(responseContainer);
 }

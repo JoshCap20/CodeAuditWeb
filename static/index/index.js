@@ -108,8 +108,8 @@ function displayResponse(data) {
         data.request.code = splitLines(data.request.code);
     }
 
-    if (data.request.output) {
-        data.request.output = splitLines(data.request.output);
+    if (data.output) {
+        data.output = splitLines(data.output);
     }
 
     if (data.profile) {
@@ -144,7 +144,9 @@ function displayResponse(data) {
 
     pre.appendChild(codeElement);
 
-    document.getElementById('responseContainer').appendChild(pre);
+    const responseContainer = document.getElementById('responseContainer');
+    responseContainer.appendChild(pre);
+    showElement(responseContainer);
 
     hljs.highlightElement(codeElement);
 }
@@ -154,8 +156,14 @@ function splitLines(data) {
 }
 
 function clearResponse() {
-    document.getElementById('responseContainer').innerHTML = '';
-    document.getElementById('graphContainer').innerHTML = '';
+    const responseContainer = document.getElementById('responseContainer');
+    const graphContainer = document.getElementById('graphContainer');
+    
+    responseContainer.innerHTML = '';
+    graphContainer.innerHTML = '';
+
+    hideElement(responseContainer);
+    hideElement(graphContainer);
 }
 
 function displayImage(link) {
@@ -166,7 +174,10 @@ function displayImage(link) {
     const img = document.createElement('img');
     img.src = cachedBusterLink;
     img.style.width = '100%';
-    document.getElementById('graphContainer').appendChild(img);
+    
+    const graphContainer = document.getElementById('graphContainer');
+    graphContainer.appendChild(img);
+    showElement(graphContainer);
 }
 
 function escapeHtml(text) {
