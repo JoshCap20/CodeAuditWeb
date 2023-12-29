@@ -83,14 +83,29 @@ function createLabel(forId, text) {
     return label;
 }
 
-function createMethodSelector(options) {
-    const select = document.createElement('select');
-    select.name = 'method';
-    options.forEach(method => {
-        const option = document.createElement('option');
-        option.value = method;
-        option.textContent = method;
-        select.appendChild(option);
-    });
+function createSelectWithPlaceHolder(name, options, placeholder) {
+    const select = createSelect(name, options);
+    select.insertAdjacentHTML('afterbegin', `<option value="" disabled selected>${placeholder}</option>`);
     return select;
+}
+
+function createSelect(name, options, id = true) {
+    const select = document.createElement('select');
+    select.name = name;
+    if (id) {
+        select.id = name;
+    }
+
+    options.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option;
+        optionElement.textContent = option;
+        select.appendChild(optionElement);
+    });
+
+    return select;
+}
+
+function createMethodSelector(options) {
+    return createSelect('method', options, false);
 }

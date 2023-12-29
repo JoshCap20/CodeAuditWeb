@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', initialize);
 
 async function initialize() {
     setupRequestContainer();
-    await populateOptions();
+    await populateLanguages();
 }
 
 function setupRequestContainer() {
@@ -10,7 +10,33 @@ function setupRequestContainer() {
     requestContainer.appendChild(createEditor());
     requestContainer.appendChild(createLabel('iterations', 'Iterations:'));
     requestContainer.appendChild(createInput('iterations', '1', 'number', '1'));
-    requestContainer.appendChild(createButton('Run Code', 'submit', submitCode));
+    createButton('Run Code', 'submit', submitCode);
+    requestContainer.appendChild();
+}
+
+async function populateLanguages() {
+    try {
+        const response = await fetch('/languages');
+        const languages = await response.json();
+        const languageSelector = createLanguageSelector(languages);
+        document.getElementById('requestContainer').prepend(languageSelector);
+    } catch (error) {
+        console.error('Error fetching languages:', error);
+    }
+}
+
+function createLanguageSelector(languages) {
+    const container = document.createElement('div');
+    const label = createLabel('language', 'Select Language:');
+    const select = createSelectWithPlaceHolder('language', languages, "Select a Language");
+
+    select.addEventListener('change', async () => {
+        await populateStrategies(select.value);
+        showElement(document.getElementById('strategyOptions'));
+    });
+
+    container.append(label, select);
+    return container;
 }
 
 function createEditor() {
@@ -33,24 +59,17 @@ function createEditor() {
     return editorDiv;
 }
 
-async function populateOptions() {
-    const strategies = await fetchStrategies();
-    const optionsContainer = document.createElement('div');
-    optionsContainer.className = 'options';
-    strategies.forEach(strategy => {
-        optionsContainer.appendChild(createCheckbox(strategy, formatLabel(strategy) + ' Analysis'));
-    });
-    document.getElementById('requestContainer').appendChild(optionsContainer);
-}
-
-async function fetchStrategies() {
+async function populateStrategies(language) {
     try {
-        const response = await fetch('/strategies');
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        return await response.json();
+        const response = await fetch(`/strategies?language=${language}`);
+        const strategies = await response.json();
+        const optionsContainer = document.getElementById('strategyOptions');
+        optionsContainer.innerHTML = '';
+        strategies.forEach(strategy => {
+            optionsContainer.appendChild(createCheckbox(strategy, formatLabel(strategy) + ' Analysis'));
+        });
     } catch (error) {
-        console.error('Fetching strategies failed:', error);
-        return [];
+        console.error('Error fetching strategies:', error);
     }
 }
 
@@ -158,7 +177,7 @@ function splitLines(data) {
 function clearResponse() {
     const responseContainer = document.getElementById('responseContainer');
     const graphContainer = document.getElementById('graphContainer');
-    
+
     responseContainer.innerHTML = '';
     graphContainer.innerHTML = '';
 
@@ -174,7 +193,7 @@ function displayImage(link) {
     const img = document.createElement('img');
     img.src = cachedBusterLink;
     img.style.width = '100%';
-    
+
     const graphContainer = document.getElementById('graphContainer');
     graphContainer.appendChild(img);
     showElement(graphContainer);
