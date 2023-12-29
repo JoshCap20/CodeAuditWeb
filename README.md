@@ -1,6 +1,8 @@
 # CodeAuditWeb
 
-CodeAuditWeb is a robust web application designed for developers and coders to test and analyze the performance of their code. Built on FastAPI, it provides an intuitive interface to execute code snippets, analyze execution time, memory usage, and detailed profiling, with additional graphically analysis. Additionally, it features an endpoint testing tool allowing users to test various HTTP methods.
+CodeAuditWeb is a web application designed for developers and coders to test and analyze the performance of their code. Built on FastAPI, it provides an intuitive interface to execute code snippets, analyze execution time, memory usage, and detailed profiling, with additional graphical analysis available. Additionally, it features an endpoint testing tool allowing users to test various HTTP methods.
+
+Currently, this project supports Python, with plans to add support for other languages in the future. Feel free to contribute to the project by adding new analysis strategies or additional language support.
 
 ## Features
 
@@ -86,5 +88,5 @@ Before running CodeAuditWeb, ensure you have the following installed:
 3. Click 'Send Request' to test the endpoint.
 
 ## Modularity and Customization
-The application is modular, allowing easy addition of new analysis strategies in the `measures` directory. These are used to populate the options in the web interface.  
+The application is modular, allowing easy addition of new analysis strategies and additional language support in the `measures` directory. These are used to populate the options in the web interface.  
 Configuration settings in config.py can be modified as per requirements.
