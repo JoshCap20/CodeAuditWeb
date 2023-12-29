@@ -1,6 +1,7 @@
 # Static Files
 STATIC_DIR: str = "static"
 INDEX_FILE: str = "static/index/index.html"
+ENDPOINT_FILE: str = "static/index/endpoint.html"
 
 # Uvicorn Settings
 HOST: str = "localhost"

@@ -19,7 +19,7 @@ app.mount("/static", StaticFiles(directory=config.STATIC_DIR), name="static")
 
 # Routes
 @app.get("/")
-def index():
+def code_tester():
     """
     Endpoint for serving the index file.
 
@@ -33,6 +33,23 @@ def index():
         return FileResponse(config.INDEX_FILE)
     except Exception as e:
         logger.error("Error while serving index file: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/endpoint")
+def endpoint_tester():
+    """
+    Endpoint for serving the endpoint file.
+
+    Returns:
+        FileResponse: The endpoint file response.
+
+    Raises:
+        HTTPException: If there is an error serving the endpoint file.
+    """
+    try:
+        return FileResponse(config.ENDPOINT_FILE)
+    except Exception as e:
+        logger.error("Error while serving endpoint file: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

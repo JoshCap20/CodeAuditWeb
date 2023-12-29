@@ -23,7 +23,6 @@ class AdvancedProfileResults(Base):
     profile: str
     line_profile: str
 
-
 class Results(Base):
     request: CodeRequest
     output: str | None = None
@@ -34,7 +33,6 @@ class Results(Base):
     advanced_profile: AdvancedProfileResults | None = None
     flamegraph: FileLink | None = None
     dotgraph: FileLink | None = None
-    memory_chart: FileLink | None = None
 
     def __setitem__(self, key, value):
         if key in self.__fields__:
