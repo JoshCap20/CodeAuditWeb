@@ -16,7 +16,7 @@ function createForm() {
     form.action = '/endpoint';
     form.style.width = '100%';
 
-    const methodSelector = createMethodSelector(['GET', 'POST', 'PUT', 'DELETE']);
+    const methodSelector = createMethodSelector(['GET', 'POST', 'PUT', 'DELETE', 'PATCH']);
     form.appendChild(methodSelector);
 
     const urlInput = createInput('url', 'URL');
