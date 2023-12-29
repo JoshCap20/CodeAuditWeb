@@ -29,36 +29,71 @@ function createForm() {
     const bodyInput = createTextArea('body', 'Body');
     form.appendChild(bodyInput);
 
-    const submitButton = createButton('Send Request', 'submit', handleFormSubmit);
+    const submitButton = createButton('Send Request', 'submit');
     form.appendChild(submitButton);
+
+    form.addEventListener('submit', handleFormSubmit);
 
     return form;
 }
 
 async function handleFormSubmit(event) {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const method = formData.get('method');
     const url = formData.get('url');
     const headers = parseHeaders(formData.get('headers'));
-    const body = formData.get('body');
+    let body = formData.get('body');
 
-    const response = await fetch(url, { method, headers, body });
-    const responseBody = await response.text();
+    if (headers.get('Content-Type') === 'application/json') {
+        try {
+            body = JSON.parse(body);
+        } catch (error) {
+            return displayResponse('Invalid JSON body');
+        }
+    }
 
-    displayResponse(responseBody);
+    try {
+        if (method === 'GET' || method === 'DELETE') {
+            body = undefined;
+        }
+        const response = await fetch(url, { method, headers, body });
+        const contentType = response.headers.get('Content-Type');
+
+        let responseBody;
+        if (contentType && contentType.includes('application/json')) {
+            responseBody = JSON.stringify(await response.json(), null, 2);
+        } else {
+            responseBody = await response.text();
+        }
+
+        displayResponse(responseBody);
+    } catch (error) {
+        displayResponse(`Error: ${error.message}`);
+    }
 }
 
 function parseHeaders(headersString) {
     const headers = new Headers();
-    headersString.split('\n').forEach(line => {
-        const [key, value] = line.split(':');
-        headers.append(key.trim(), value.trim());
-    });
+    if (headersString) {
+        headersString.split('\n').forEach(line => {
+            const parts = line.split(':');
+            if (parts.length === 2) {
+                headers.append(parts[0].trim(), parts[1].trim());
+            }
+        });
+    }
     return headers;
 }
 
 function displayResponse(response) {
-    const responseContainer = document.getElementById('responseContainer');
-    responseContainer.textContent = response;
+    const responseElement = document.createElement('pre');
+    responseElement.style.whiteSpace = 'pre-wrap';
+    const responseText = document.createElement('code');
+    responseText.className = 'json';
+    responseText.textContent = response;
+    responseElement.appendChild(responseText);
+    document.getElementById('responseContainer').appendChild(responseElement);
+    hljs.highlightElement(responseElement);
 }
