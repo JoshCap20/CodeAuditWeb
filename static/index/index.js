@@ -121,6 +121,14 @@ function displayResponse(data) {
         data.advanced_profile.line_profile = splitLines(data.advanced_profile.line_profile);
     }
 
+    data = Object.keys(data).reduce((acc, key) => {
+        if (data[key]) {
+            acc[key] = data[key];
+        }
+        return acc;
+    }
+        , {});
+
     const pre = document.createElement('pre');
     pre.style.whiteSpace = 'pre-wrap';
     const codeElement = document.createElement('code');

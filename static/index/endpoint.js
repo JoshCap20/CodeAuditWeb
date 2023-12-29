@@ -14,7 +14,6 @@ function createForm() {
     form.id = 'endpointRequest';
     form.method = 'POST';
     form.action = '/endpoint';
-    form.style.height = '400px';
     form.style.width = '100%';
 
     const methodSelector = createMethodSelector(['GET', 'POST', 'PUT', 'DELETE']);
@@ -27,6 +26,7 @@ function createForm() {
     form.appendChild(headersInput);
 
     const bodyInput = createTextArea('body', 'Body');
+    bodyInput.setAttribute('rows', '10');
     form.appendChild(bodyInput);
 
     const submitButton = createButton('Send Request', 'submit');
