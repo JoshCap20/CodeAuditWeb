@@ -99,7 +99,8 @@ function createSelect(name, options, id = true) {
     options.forEach(option => {
         const optionElement = document.createElement('option');
         optionElement.value = option;
-        optionElement.textContent = option;
+        optionElement.textContent = option.charAt(0).toUpperCase()
+        + option.slice(1)
         select.appendChild(optionElement);
     });
 

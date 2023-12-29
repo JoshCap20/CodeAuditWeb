@@ -7,28 +7,59 @@ async function initialize() {
 
 function setupRequestContainer() {
     const requestContainer = document.getElementById('requestContainer');
-    
+    const topRow = createTopRow();
+    const optionsRow = createOptionsRow();
+    const bottomRow = createBottomRow();
 
+    requestContainer.appendChild(topRow);
+    requestContainer.appendChild(createEditor());
+    requestContainer.appendChild(optionsRow);
+    requestContainer.appendChild(bottomRow);
+}
+
+function createTopRow() {
     const topRow = document.createElement('div');
     topRow.className = 'top-row';
-    requestContainer.appendChild(topRow);
 
-    requestContainer.appendChild(createEditor());
+    const iterationsContainer = createIterationsContainer();
+    topRow.appendChild(iterationsContainer);
 
-    const bottomRow = document.createElement('div');
-    bottomRow.className = 'bottom-row';
-    requestContainer.appendChild(bottomRow);
+    return topRow;
+}
 
-    
+function createIterationsContainer() {
     const iterationsContainer = document.createElement('div');
     iterationsContainer.className = 'iterations-container';
+
     const iterationsLabel = createLabel('iterations', 'Iterations:');
     const iterationsInput = createInput('iterations', '1', 'number', '1');
+
     iterationsContainer.appendChild(iterationsLabel);
     iterationsContainer.appendChild(iterationsInput);
-    
-    topRow.appendChild(iterationsContainer);
+
+    return iterationsContainer;
+}
+
+function createOptionsRow() {
+    const optionsRow = document.createElement('div');
+    optionsRow.className = 'options-row';
+
+    const fullScreenBtn = createButton('Full Screen', 'button', toggleFullScreen, 'fullScreenBtn');
+    fullScreenBtn.id = 'fullScreenBtn';
+    optionsRow.appendChild(fullScreenBtn);
+    optionsRow.appendChild(createButton('Clear Editor', 'button', () => window.editor.setValue('')));
+    optionsRow.appendChild(createButton('-', 'button', () => window.editor.setFontSize(window.editor.getFontSize() - 1)));
+    optionsRow.appendChild(createButton('+', 'button', () => window.editor.setFontSize(window.editor.getFontSize() + 1)));
+
+    return optionsRow;
+}
+
+function createBottomRow() {
+    const bottomRow = document.createElement('div');
+    bottomRow.className = 'bottom-row';
     bottomRow.appendChild(createButton('Analyze Code', 'submit', submitCode));
+
+    return bottomRow;
 }
 
 async function populateLanguages() {
@@ -82,12 +113,34 @@ async function populateStrategies(language) {
         const strategies = await response.json();
         const optionsContainer = document.getElementById('strategyOptions');
         optionsContainer.innerHTML = '';
+
+        const gridContainer = document.createElement('div');
+        gridContainer.className = 'grid-container';
+
         strategies.forEach(strategy => {
-            optionsContainer.appendChild(createCheckbox(strategy, formatLabel(strategy) + ' Analysis'));
+            gridContainer.appendChild(createCheckbox(strategy, formatLabel(strategy) + ' Analysis'));
         });
+
+        optionsContainer.appendChild(gridContainer);
     } catch (error) {
         console.error('Error fetching strategies:', error);
     }
+}
+
+function toggleFullScreen() {
+    const editorDiv = document.getElementById('codeInput');
+    editorDiv.classList.toggle('full-screen');
+
+    const fullScreenBtn = document.getElementById('fullScreenBtn');
+    if (editorDiv.classList.contains('full-screen')) {
+        fullScreenBtn.textContent = 'Exit Full Screen';
+        fullScreenBtn.classList.add('full-screen-btn');
+    } else {
+        fullScreenBtn.textContent = 'Full Screen';
+        fullScreenBtn.classList.remove('full-screen-btn');
+    }
+
+    window.editor.resize();
 }
 
 function createCheckbox(id, label) {
