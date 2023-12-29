@@ -1,3 +1,4 @@
+/* Global */
 @media screen and (max-width: 768px) {
     body {
         display: block;
@@ -121,15 +122,13 @@ nav a:hover {
     color: #fff;
 }
 
-.github-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.github-link img, .github-link i {
+.github-icon {
+    background-image: url('/static/favicon.ico');
+    background-size: 150%;
+    background-repeat: no-repeat;
+    background-position: center;
     display: block;
     margin: 0 auto;
     height: 20px;
-    width: 100%;
+    width: 20px;
 }

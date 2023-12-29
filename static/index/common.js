@@ -1,6 +1,28 @@
-// Nav Bar Active Link
+// Navigation
+document.addEventListener('DOMContentLoaded', function () {
+    loadHeader();
+    markActiveLink();
+});
 
-document.addEventListener('DOMContentLoaded', () => {
+function loadHeader() {
+    const headerHtml = `
+        <header class="navbar">
+            <nav>
+                <ul>
+                    <li><a href="/" class="nav-link">Code</a></li>
+                    <li><a href="https://github.com/JoshCap20/CodeAuditWeb" target="_blank" class="nav-link github-link">
+                        <img src="/static/favicon.ico" alt="GitHub" class="github-icon">
+                    </a></li>
+                    <li><a href="/endpoint" class="nav-link">Endpoint</a></li>
+                </ul>
+            </nav>
+        </header>
+    `;
+
+    document.body.insertAdjacentHTML('afterbegin', headerHtml);
+}
+
+function markActiveLink() {
     const currentUrl = window.location.href;
     const navLinks = document.querySelectorAll('.nav-link');
 
@@ -9,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             link.classList.add('active');
         }
     });
-});
+};
 
 // Hidden Elements
 
@@ -30,7 +52,7 @@ function createTextArea(name, placeholder) {
     return textArea;
 }
 
-function createInput(name, placeholder, type = 'text', value = '', min = 1, ) {
+function createInput(name, placeholder, type = 'text', value = '', min = 1,) {
     const input = document.createElement('input');
     input.type = type;
     input.name = name;
@@ -46,7 +68,7 @@ function createInput(name, placeholder, type = 'text', value = '', min = 1, ) {
     return input;
 }
 
-function createButton(text, type, onClickFunction = () => {}) {
+function createButton(text, type, onClickFunction = () => { }) {
     const button = document.createElement('button');
     button.type = type;
     button.textContent = text;
