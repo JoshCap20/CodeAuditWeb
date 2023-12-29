@@ -165,6 +165,7 @@ function formatLabel(str) {
 async function submitCode() {
     const code = window.editor.getValue();
     const iterations = document.getElementById('iterations').value;
+    const language = document.getElementById('language').value;
     const options = Array.from(document.querySelectorAll('input[name="option"]:checked'))
         .map(el => el.value);
 
@@ -179,7 +180,7 @@ async function submitCode() {
         const response = await fetch('/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code, options, iterations })
+            body: JSON.stringify({ code, language, options, iterations })
         });
 
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
