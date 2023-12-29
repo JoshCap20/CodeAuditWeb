@@ -120,3 +120,16 @@ nav a:hover {
     background-color: #555;
     color: #fff;
 }
+
+.github-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.github-link img, .github-link i {
+    display: block;
+    margin: 0 auto;
+    height: 20px;
+    width: 100%;
+}
