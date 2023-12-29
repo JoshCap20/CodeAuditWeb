@@ -10,8 +10,7 @@ function setupRequestContainer() {
     requestContainer.appendChild(createEditor());
     requestContainer.appendChild(createLabel('iterations', 'Iterations:'));
     requestContainer.appendChild(createInput('iterations', '1', 'number', '1'));
-    createButton('Run Code', 'submit', submitCode);
-    requestContainer.appendChild();
+    requestContainer.appendChild(createButton('Run Code', 'submit', submitCode));
 }
 
 async function populateLanguages() {
