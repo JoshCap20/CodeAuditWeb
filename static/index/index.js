@@ -7,10 +7,28 @@ async function initialize() {
 
 function setupRequestContainer() {
     const requestContainer = document.getElementById('requestContainer');
+    
+
+    const topRow = document.createElement('div');
+    topRow.className = 'top-row';
+    requestContainer.appendChild(topRow);
+
     requestContainer.appendChild(createEditor());
-    requestContainer.appendChild(createLabel('iterations', 'Iterations:'));
-    requestContainer.appendChild(createInput('iterations', '1', 'number', '1'));
-    requestContainer.appendChild(createButton('Run Code', 'submit', submitCode));
+
+    const bottomRow = document.createElement('div');
+    bottomRow.className = 'bottom-row';
+    requestContainer.appendChild(bottomRow);
+
+    
+    const iterationsContainer = document.createElement('div');
+    iterationsContainer.className = 'iterations-container';
+    const iterationsLabel = createLabel('iterations', 'Iterations:');
+    const iterationsInput = createInput('iterations', '1', 'number', '1');
+    iterationsContainer.appendChild(iterationsLabel);
+    iterationsContainer.appendChild(iterationsInput);
+    
+    topRow.appendChild(iterationsContainer);
+    bottomRow.appendChild(createButton('Analyze Code', 'submit', submitCode));
 }
 
 async function populateLanguages() {
@@ -18,7 +36,7 @@ async function populateLanguages() {
         const response = await fetch('/languages');
         const languages = await response.json();
         const languageSelector = createLanguageSelector(languages);
-        document.getElementById('requestContainer').prepend(languageSelector);
+        document.querySelector('.top-row').appendChild(languageSelector);
     } catch (error) {
         console.error('Error fetching languages:', error);
     }
@@ -26,7 +44,7 @@ async function populateLanguages() {
 
 function createLanguageSelector(languages) {
     const container = document.createElement('div');
-    const label = createLabel('language', 'Select Language:');
+    const label = createLabel('language', 'Language:');
     const select = createSelectWithPlaceHolder('language', languages, "Select a Language");
 
     select.addEventListener('change', async () => {

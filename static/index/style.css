@@ -84,6 +84,19 @@ input[type="checkbox"] {
     margin-right: 10px;
 }
 
+.top-row,
+.bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.bottom-row button {
+    margin-top: 10px;
+    flex-grow: 1;
+}
+
 /* Navbar */
 
 .navbar {
