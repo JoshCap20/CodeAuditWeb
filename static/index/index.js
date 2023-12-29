@@ -10,7 +10,7 @@ function setupRequestContainer() {
     requestContainer.appendChild(createEditor());
     requestContainer.appendChild(createLabel('iterations', 'Iterations:'));
     requestContainer.appendChild(createInput('iterations', '1', 'number', '1'));
-    requestContainer.appendChild(createButton('Run Code', submitCode));
+    requestContainer.appendChild(createButton('Run Code', 'submit', submitCode));
 }
 
 function createEditor() {
@@ -31,29 +31,6 @@ function createEditor() {
     });
     window.editor = editor; // Making editor globally accessible
     return editorDiv;
-}
-
-function createLabel(forId, text) {
-    const label = document.createElement('label');
-    label.htmlFor = forId;
-    label.textContent = text;
-    return label;
-}
-
-function createInput(id, value, type = 'text', min = '0') {
-    const input = document.createElement('input');
-    input.id = id;
-    input.value = value;
-    input.type = type;
-    input.min = min;
-    return input;
-}
-
-function createButton(text, onClickFunction) {
-    const button = document.createElement('button');
-    button.textContent = text;
-    button.addEventListener('click', onClickFunction);
-    return button;
 }
 
 async function populateOptions() {

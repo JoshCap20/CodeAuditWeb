@@ -65,6 +65,19 @@ button:hover {
     background-color: #0056b3;
 }
 
+input[type="checkbox"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
 /* Navbar */
 
 .navbar {
@@ -98,6 +111,7 @@ nav a:hover {
     background-color: #555;
 }
 
-.active {
+.nav-link.active {
     background-color: #555;
+    color: #fff;
 }
