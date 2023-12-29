@@ -7,10 +7,12 @@ from memory_profiler import memory_usage
 from models import CodeRequest, MemoryResults, AdvancedMemoryResults
 from utils import get_logger
 
+from ..interface import AbstractAnalysisStrategy
+
 logger = get_logger(__name__)
 
 
-class MemoryAnalysis:
+class MemoryAnalysis(AbstractAnalysisStrategy):
     """
     Class for analyzing memory usage in code execution.
     """

@@ -1,1 +1,1 @@
-from .analyzer import PerformanceAnalyzer
+from .analysis import AnalysisHandler

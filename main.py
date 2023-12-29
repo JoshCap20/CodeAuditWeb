@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 
 import config
 from models import CodeRequest, Results
-from measures import PerformanceAnalyzer
+from measures import AnalysisHandler
 
 from utils import get_logger
 
@@ -18,6 +18,9 @@ app.mount("/static", StaticFiles(directory=config.STATIC_DIR), name="static")
 
 
 # Routes
+
+## Pages 
+
 @app.get("/")
 def code_tester():
     """
@@ -52,17 +55,33 @@ def endpoint_tester():
         logger.error("Error while serving endpoint file: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+## Helpful frontend APIs
+
+@app.get("/languages", response_model=list[str])
+def get_languages() -> list[str]:
+    """
+    Retrieve a list of languages available for analysis.
+
+    Returns:
+        list[str]: A list of language names.
+    """
+    return list(AnalysisHandler.languages.keys())
 
 @app.get("/strategies", response_model=list[str])
-def get_strategies() -> list[str]:
+def get_strategies(language: str) -> list[str]:
     """
     Retrieve a list of strategies available in the PerformanceAnalyzer.
 
     Returns:
         list[str]: A list of strategy names.
     """
-    return list(PerformanceAnalyzer.strategies.keys())
+    analyzer = AnalysisHandler.languages.get(language)
+    if analyzer is None:
+        raise HTTPException(status_code=404, detail=f"Language '{language}' not supported.")
 
+    return list(analyzer.strategies.keys())
+
+## the magic
 
 @app.post("/analyze", response_model=Results)
 async def process_code(request: CodeRequest) -> Results:
@@ -79,7 +98,7 @@ async def process_code(request: CodeRequest) -> Results:
         HTTPException: If there is an error during the code analysis.
     """
     try:
-        return PerformanceAnalyzer.measure(request)
+        return AnalysisHandler.measure(request)
     # TODO: Improve error handling
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

@@ -8,10 +8,12 @@ from line_profiler import LineProfiler
 from utils import get_logger
 from models import CodeRequest, ProfileResults, AdvancedProfileResults
 
+from ..interface import AbstractAnalysisStrategy
+
 logger = get_logger(__name__)
 
 
-class ProfileAnalysis:
+class ProfileAnalysis(AbstractAnalysisStrategy):
     """
     Class for performing code profiling and analysis.
     """
@@ -49,9 +51,11 @@ class ProfileAnalysis:
         try:
             line_profile: str = ProfileAnalysis.line_profiler(request)
         except Exception as e:
-            logger.error(f"[ProfileAnalysis] Error occurred during line-by-line profiling: {e}")
+            logger.error(
+                f"[ProfileAnalysis] Error occurred during line-by-line profiling: {e}"
+            )
             line_profile = "Unable to generate line-by-line profile."
-            
+
         return AdvancedProfileResults(profile=profile, line_profile=line_profile)
 
     @staticmethod

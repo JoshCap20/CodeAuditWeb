@@ -4,10 +4,12 @@ import subprocess
 from utils import get_logger
 from models import CodeRequest, TimeResults
 
+from ..interface import AbstractAnalysisStrategy
+
 logger = get_logger(__name__)
 
 
-class TimeAnalysis:
+class TimeAnalysis(AbstractAnalysisStrategy):
     """
     Class for analyzing the execution time of code snippets.
     """

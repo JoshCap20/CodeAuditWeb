@@ -10,6 +10,7 @@ class CodeRequest(Base):
 
     code: str
     code_file: FileLink | None = None
+    language: str
     options: list[str]
     iterations: int = 10
 

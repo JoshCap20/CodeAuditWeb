@@ -2,6 +2,7 @@ from .time import TimeAnalysis
 from .memory import MemoryAnalysis
 from .profile import ProfileAnalysis
 from .graphs import DotGraphGenerator, FlameGraphGenerator
+from ..interface import AbstractPerformanceAnalyzer
 
 from models import CodeRequest, Results
 
@@ -11,7 +12,7 @@ from utils import get_logger
 logger = get_logger(__name__)
 
 
-class PerformanceAnalyzer:
+class PerformanceAnalyzer(AbstractPerformanceAnalyzer):
     """
     Class responsible for measuring performance of code using different strategies.
     """
@@ -40,12 +41,12 @@ class PerformanceAnalyzer:
         """
         options = PerformanceAnalyzer._parse_options(request.options)
         results = Results(request=request)
-        
+
         try:
             request.generate_code_file()
 
             results.output = request.execute()
-            
+
             for option in options:
                 strategy_fn = cls.strategies.get(option)
                 if not strategy_fn:
@@ -79,5 +80,5 @@ class PerformanceAnalyzer:
             options.remove("memory")
         if "profile" in options and "advanced_profile" in options:
             options.remove("profile")
-        
+
         return options
