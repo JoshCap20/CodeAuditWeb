@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>CodeAuditWeb</title>
@@ -7,12 +8,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
-    <link rel="stylesheet" href="static/index/index.css">
+    <link rel="stylesheet" href="/static/index/style.css">
 </head>
+
 <body>
+    <header class="navbar">
+        <nav>
+            <ul>
+                <li><a href="/" class="active">Code</a></li>
+                <li><a href="/endpoint">Endpoint</a></li>
+            </ul>
+        </nav>
+    </header>
     <div id="requestContainer" class="container"></div>
     <div id="responseContainer" class="container"></div>
+    <div id="graphContainer" class="container"></div>
 
-    <script src="static/index/index.js"></script>
+    <script src="/static/index/index.js"></script>
 </body>
+
 </html>

@@ -102,10 +102,12 @@ async function submitCode() {
     const options = Array.from(document.querySelectorAll('input[name="option"]:checked'))
         .map(el => el.value);
 
-    if (!code || !iterations || options.length === 0) {
+    if (!code || !iterations) {
         document.getElementById('responseContainer').innerText = 'Please fill in all fields.';
         return;
     }
+
+    clearResponse();
 
     try {
         const response = await fetch('/analyze', {
@@ -124,9 +126,6 @@ async function submitCode() {
 }
 
 function displayResponse(data) {
-    const responseContainer = document.getElementById('responseContainer');
-    responseContainer.innerHTML = '';
-
     // TODO: Simplify this
     if (data.request.code) {
         data.request.code = splitLines(data.request.code);
@@ -145,8 +144,6 @@ function displayResponse(data) {
         data.advanced_profile.line_profile = splitLines(data.advanced_profile.line_profile);
     }
 
-    
-
     const pre = document.createElement('pre');
     pre.style.whiteSpace = 'pre-wrap';
     const codeElement = document.createElement('code');
@@ -161,7 +158,8 @@ function displayResponse(data) {
     codeElement.innerHTML = escapeHtml(jsonString);
 
     pre.appendChild(codeElement);
-    responseContainer.appendChild(pre);
+
+    document.getElementById('responseContainer').appendChild(pre);
 
     hljs.highlightElement(codeElement);
 }
@@ -170,13 +168,20 @@ function splitLines(data) {
     return data.split('\n');
 }
 
+function clearResponse() {
+    document.getElementById('responseContainer').innerHTML = '';
+    document.getElementById('graphContainer').innerHTML = '';
+}
+
 function displayImage(link) {
-    // Add a new image with link as source
+    // Defeats browser caching old image
+    const uniqueString = new Date().getTime();
+    const cachedBusterLink = link + '?v=' + uniqueString;
+
     const img = document.createElement('img');
-    img.src = link;
+    img.src = cachedBusterLink;
     img.style.width = '100%';
-    img.style.height = 'auto';
-    document.getElementById('responseContainer').appendChild(img);
+    document.getElementById('graphContainer').appendChild(img);
 }
 
 function escapeHtml(text) {
